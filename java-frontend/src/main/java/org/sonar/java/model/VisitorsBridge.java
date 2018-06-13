@@ -231,6 +231,7 @@ public class VisitorsBridge {
       }
       LOG.warn("Classes not found during the analysis : [{}{}]", classesNotFound.stream().limit(50).collect(Collectors.joining(", ")), message);
     }
+    scanners.forEach(JavaFileScanner::endOfAnalysis);
     classLoader.close();
   }
 }

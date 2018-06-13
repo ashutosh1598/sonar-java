@@ -70,7 +70,9 @@ import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -139,13 +141,18 @@ public class JavaAstScannerTest {
       public void scanFile(JavaFileScannerContext context) {
         // do nothing
       }
+      @Override
+      public void endOfAnalysis() {
+        // do nothing
+      }
     });
     SonarComponents sonarComponents = mock(SonarComponents.class);
     when(sonarComponents.analysisCancelled()).thenReturn(true);
     JavaAstScanner scanner = new JavaAstScanner(JavaParser.createParser(), sonarComponents);
     scanner.setVisitorBridge(new VisitorsBridge(Lists.newArrayList(visitor), Lists.newArrayList(), sonarComponents));
     scanner.scan(ImmutableList.of(new File("src/test/files/metrics/NoSonar.java")));
-    verifyZeroInteractions(visitor);
+    verify(visitor, never()).scanFile(any());
+    verify(visitor, times(1)).endOfAnalysis();
   }
 
   @Test
@@ -227,7 +234,10 @@ public class JavaAstScannerTest {
     scanner.setVisitorBridge(new VisitorsBridge(Lists.newArrayList(listener), Lists.newArrayList(), sonarComponents));
     scanner.scan(ImmutableList.of(new File("src/test/resources/AstScannerParseError.txt")));
     verify(sonarComponents).reportAnalysisError(any(RecognitionException.class), any(File.class));
-    verifyZeroInteractions(listener);
+    verify(listener, never()).scanFile(any());
+    verify(listener, never()).processRecognitionException(any());
+    verify(listener, never()).processException(any());
+    verify(listener, times(1)).endOfAnalysis();
   }
 
   private static JavaAstScanner defaultJavaAstScanner() {

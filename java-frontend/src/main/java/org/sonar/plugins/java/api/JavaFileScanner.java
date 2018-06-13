@@ -33,4 +33,8 @@ public interface JavaFileScanner extends JavaCheck {
    */
   void scanFile(JavaFileScannerContext context);
 
+  /**
+   * Method called at the end of analysis, after all files have been analyzed.
+   */
+  default void endOfAnalysis() { }
 }
