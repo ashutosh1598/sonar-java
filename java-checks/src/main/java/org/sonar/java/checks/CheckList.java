@@ -64,6 +64,7 @@ import org.sonar.java.checks.serialization.SerializableFieldInSerializableClassC
 import org.sonar.java.checks.serialization.SerializableObjectInSessionCheck;
 import org.sonar.java.checks.serialization.SerializableSuperConstructorCheck;
 import org.sonar.java.checks.spring.RequestMappingMethodPublicCheck;
+import org.sonar.java.checks.spring.SpringBeansShouldBeAccessibleCheck;
 import org.sonar.java.checks.spring.SpringComponentWithNonAutowiredMembersCheck;
 import org.sonar.java.checks.spring.SpringComponentWithWrongScopeCheck;
 import org.sonar.java.checks.spring.SpringRequestMappingMethodCheck;
@@ -527,6 +528,7 @@ public final class CheckList {
       .add(BooleanMethodNameCheck.class)
       .add(StaticFieldUpdateInConstructorCheck.class)
       .add(NestedTernaryOperatorsCheck.class)
+      .add(SpringBeansShouldBeAccessibleCheck.class)
       .add(SpringComponentWithNonAutowiredMembersCheck.class)
       .add(SpringComponentWithWrongScopeCheck.class)
       .add(SpringRequestMappingMethodCheck.class)
